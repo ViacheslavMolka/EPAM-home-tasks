@@ -1,0 +1,17 @@
+.courses {
+  border: 1px solid blue;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+
+.searchBarWrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.courseCardWrapper {
+  padding-bottom: 20px;
+}

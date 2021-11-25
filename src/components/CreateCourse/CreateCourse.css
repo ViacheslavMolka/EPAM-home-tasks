@@ -1,0 +1,105 @@
+.createCourseForm {
+  border: 1px solid blue;
+  margin-top: 5px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: flex-end;
+}
+
+.description {
+  padding: 0 20px;
+}
+
+.description textarea {
+  height: 120px;
+  width: 100%;
+  margin-top: 5px;
+  padding: 0;
+  border: 1px solid yellowgreen;
+}
+
+.authorsWrapper {
+  border: 1px solid black;
+  margin: 20px;
+  padding: 10px;
+  display: flex;
+}
+
+.authorsWrapper div {
+  width: 100%;
+}
+
+.addAuthor {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+}
+
+.addAuthor button {
+  margin-top: 10px;
+}
+
+.addAuthor input {
+  width: 100%;
+}
+
+.addAuthor span {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.duration {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-top: 50px;
+}
+
+.duration input {
+  width: 100%;
+}
+
+.durationTitle {
+  font-weight: bold;
+  text-align: center;
+}
+
+.durationHours {
+  font-size: 23px;
+  margin-top: 30px;
+  padding-bottom: 20px;
+}
+
+.authorsTitle {
+  font-weight: bold;
+}
+
+.authorList li {
+  list-style-type: none;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
+.authorList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authorList span {
+  margin-bottom: 20px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

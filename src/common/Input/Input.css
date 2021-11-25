@@ -1,0 +1,10 @@
+.input {
+  border: 1px solid orange;
+  height: 26px;
+  width: 250px;
+  margin-top: 5px;
+}
+
+.inputWrapper {
+  width: 100%;
+}

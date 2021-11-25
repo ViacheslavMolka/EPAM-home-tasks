@@ -1,0 +1,29 @@
+.card {
+  border: 1px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 10px 20px;
+}
+
+.firstSection {
+  max-width: 65%;
+}
+
+.secondSection {
+  display: flex;
+  flex-direction: column;
+  padding-left: 70px;
+  width: 27%;
+}
+
+.secondSection span {
+  padding-bottom: 7px;
+}
+
+.authors {
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* max-width: 270px; */
+}

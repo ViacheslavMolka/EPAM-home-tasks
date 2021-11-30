@@ -1,16 +1,23 @@
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import SearchBar from './components/SearchBar/SearchBar';
 import CourseCard from './components/CourseCard/CourseCard';
 import { Button } from '../../common/Button/Button';
-import CreateCourse from '../CreateCourse/CreateCourse';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
+import {
+	mockedAuthorsList,
+	mockedCoursesList,
+	buttonText,
+} from '../../constants';
+import { unique } from '../../helpers/uniqueArray';
+
 import './Courses.css';
 
 function Courses() {
 	const [searchValue, setSearchValue] = React.useState('');
 	const [searchResult, setSearchResult] = React.useState(mockedCoursesList);
-	const [isCreateCourse, setIsCreateCourse] = React.useState(false);
+	const navigate = useNavigate();
+	const token = localStorage.getItem('token');
 
 	const handleChange = (e) => {
 		setSearchValue(e.target.value.toLowerCase());
@@ -32,8 +39,8 @@ function Courses() {
 		e.preventDefault();
 	};
 
-	if (isCreateCourse) {
-		return <CreateCourse onChangePage={setIsCreateCourse} />;
+	if (!token) {
+		return <Navigate to='/login' />;
 	}
 
 	return (
@@ -41,14 +48,13 @@ function Courses() {
 			<div className='searchBarWrapper'>
 				<SearchBar onChange={handleChange} onSubmit={handleSubmit} />
 				<Button
-					buttonText='Add new course'
-					onClick={() => setIsCreateCourse(true)}
+					buttonText={buttonText.addNewCourse}
+					onClick={() => navigate('add')}
 				/>
 			</div>
 			{searchResult.map((item, idx) => {
-				const authorsId = item.authors;
 				const authors = [];
-				authorsId.forEach((a) => {
+				item.authors.forEach((a) => {
 					mockedAuthorsList.forEach((b) => {
 						if (a === b.id) {
 							authors.push(b.name);
@@ -58,11 +64,12 @@ function Courses() {
 				return (
 					<div className='courseCardWrapper' key={`card${idx}`}>
 						<CourseCard
-							authors={authors}
+							authors={unique(authors)}
 							title={item.title}
 							description={item.description}
 							duration={item.duration}
 							creationDate={item.creationDate}
+							id={item.id}
 						/>
 					</div>
 				);

@@ -1,0 +1,23 @@
+.registration {
+  border: 1px solid blue;
+  margin-top: 5px;
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+  
+.registration span:first-child {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 30px;
+}
+  
+.registration input {
+  margin-bottom: 25px;
+}
+
+.registration button {
+  margin-bottom: 25px;
+}

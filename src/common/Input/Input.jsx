@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './Input.css';
 
@@ -27,5 +28,15 @@ function Input({
 		</div>
 	);
 }
+
+Input.propTypes = {
+	placeholderText: PropTypes.string,
+	onChange: PropTypes.func,
+	labelText: PropTypes.string,
+	inputName: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	type: PropTypes.string,
+	width: PropTypes.string,
+};
 
 export default Input;

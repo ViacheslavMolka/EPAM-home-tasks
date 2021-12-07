@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import Input from '../../common/Input/Input';
 import { Button } from '../../common/Button/Button';
+import { userLogin } from '../../store/user/actionCreators';
 
 import './Login.css';
 
 function Login() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const [login, setLogin] = React.useState({
 		email: '',
 		password: '',
@@ -29,6 +33,7 @@ function Login() {
 		});
 		const result = await response.json();
 		if (result.successful) {
+			dispatch(userLogin({ ...result.user, token: result.result }));
 			localStorage.setItem('token', result.result);
 			navigate('/courses');
 		} else alert(result.result);

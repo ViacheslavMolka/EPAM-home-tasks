@@ -1,25 +1,33 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-import { getTimeFromMins } from '../../helpers/dateHelper';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { getTimeFromMins } from '../../helpers/timeHelper';
 import { unique } from '../../helpers/uniqueArray';
+import { getCourses, getAuthors } from '../../selectors';
 
 import './CourseInfo.css';
 
 function CourseInfo() {
 	const { courseId } = useParams();
-	const infoArray = mockedCoursesList.find((item) => item.id === courseId);
-	const authors = [];
+	const { courses } = useSelector(getCourses);
+	const { authors } = useSelector(getAuthors);
+
+	const infoArray = courses.find((item) => item.id === courseId);
+	const authorsList = [];
 	infoArray &&
 		infoArray.authors.forEach((a) => {
-			mockedAuthorsList.forEach((b) => {
+			authors.forEach((b) => {
 				if (a === b.id) {
-					authors.push(b.name);
+					authorsList.push(b.name);
 				}
 			});
 		});
-	const authorsLine = unique(authors).join(', ');
+	const authorsLine = unique(authorsList).join(', ');
+
+	if (courses.length === 0) {
+		return <Navigate to='/courses' />;
+	}
 
 	return (
 		infoArray && (

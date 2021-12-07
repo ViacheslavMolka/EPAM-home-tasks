@@ -1,12 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../../../common/Button/Button';
-import { getTimeFromMins } from '../../../../helpers/DateHelper';
+import { getTimeFromMins } from '../../../../helpers/dateHelper';
 
 import './CourseCard.css';
 
-function Header({ description, title, duration, creationDate, authors }) {
+function CourseCard({
+	description,
+	title,
+	duration,
+	creationDate,
+	authors,
+	id,
+}) {
 	const authorsLine = authors.join(', ');
+	const navigate = useNavigate();
 
 	return (
 		<div className='card'>
@@ -24,10 +33,13 @@ function Header({ description, title, duration, creationDate, authors }) {
 				<span>
 					<strong>Created:</strong> {creationDate}
 				</span>
-				<Button buttonText='Show course' onClick={() => {}} />
+				<Button
+					buttonText='Show course'
+					onClick={() => navigate(`/courses/${id}`)}
+				/>
 			</div>
 		</div>
 	);
 }
 
-export default Header;
+export default CourseCard;

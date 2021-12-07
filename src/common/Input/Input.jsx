@@ -9,9 +9,10 @@ function Input({
 	inputName,
 	value,
 	type = 'text',
+	width = '100%',
 }) {
 	return (
-		<div className='inputWrapper'>
+		<div className='inputWrapper' style={{ width: width }}>
 			<label htmlFor={inputName}>{labelText}</label>
 			<br />
 			<input

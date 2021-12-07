@@ -1,0 +1,38 @@
+.infoCard {
+  border: 1px solid blue;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  height: 85vh;
+  position: relative;
+}
+
+.infoWrapper {
+  display: flex;
+  padding: 20px 0;
+}
+
+.link {
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.infoWrapper p {
+  width: 60%;
+  padding-right: 50px;
+  margin: 0;
+}
+
+.infoTitle {
+  font-weight: bold;
+  font-size: 30px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+}

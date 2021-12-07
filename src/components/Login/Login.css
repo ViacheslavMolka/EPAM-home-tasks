@@ -1,0 +1,23 @@
+.loginForm {
+  border: 1px solid blue;
+  margin-top: 5px;
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loginForm span:first-child {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 30px;
+}
+
+.loginForm input {
+  margin-bottom: 25px;
+}
+
+.loginForm button {
+  margin-bottom: 25px;
+}

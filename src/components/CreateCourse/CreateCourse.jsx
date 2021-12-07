@@ -1,14 +1,22 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
-import { getDate, getTimeFromMins } from '../../helpers/DateHelper';
+import {
+	mockedAuthorsList,
+	mockedCoursesList,
+	buttonText,
+} from '../../constants';
+import { getDate, getTimeFromMins } from '../../helpers/dateHelper';
+import { unique } from '../../helpers/uniqueArray';
 
 import './CreateCourse.css';
 
-function CreateCourse({ onChangePage }) {
+function CreateCourse() {
+	const navigate = useNavigate();
+	const token = localStorage.getItem('token');
 	const [authors, setAuthors] = React.useState([]);
 	const [mockedAuthors, setMockedAuthors] = React.useState(mockedAuthorsList);
 	const [authorName, setAuthorName] = React.useState('');
@@ -54,9 +62,14 @@ function CreateCourse({ onChangePage }) {
 		} else {
 			mockedAuthorsList.push(...authors);
 			mockedCoursesList.push(values);
-			onChangePage(false);
+			navigate('/courses');
 		}
 	};
+
+	if (!token) {
+		return <Navigate to='/login' />;
+	}
+
 	return (
 		<div className='createCourseForm'>
 			<div className='title'>
@@ -67,7 +80,11 @@ function CreateCourse({ onChangePage }) {
 					value={values.title}
 					onChange={handleChange}
 				/>
-				<Button type='submit' buttonText='Create course' onClick={onSubmit} />
+				<Button
+					type='submit'
+					buttonText={buttonText.createCourse}
+					onClick={onSubmit}
+				/>
 			</div>
 			<div className='description'>
 				<label htmlFor='description'>Description</label>
@@ -93,7 +110,7 @@ function CreateCourse({ onChangePage }) {
 						/>
 						<Button
 							disabled={authorName === '' && true}
-							buttonText='Create author'
+							buttonText={buttonText.createAuthor}
 							onClick={onAuthorCreate}
 						/>
 					</div>
@@ -114,22 +131,31 @@ function CreateCourse({ onChangePage }) {
 				</div>
 				<div className='authorList'>
 					<span className='authorsTitle'>Authors</span>
-					{mockedAuthors.map((item, idx) => (
-						<li key={`author${idx}`}>
-							{item.name}
-							<Button
-								buttonText='Add author'
-								onClick={() => setAuthors([...authors, item])}
-							/>
-						</li>
-					))}
+					{unique(mockedAuthors).map((item, idx) => {
+						let isDisabled = false;
+						authors.forEach((a) => {
+							if (item.name === a.name) {
+								isDisabled = true;
+							}
+						});
+						return (
+							<li key={`author${idx}`}>
+								{item.name}
+								<Button
+									disabled={isDisabled}
+									buttonText={buttonText.addAuthor}
+									onClick={() => setAuthors([...authors, item])}
+								/>
+							</li>
+						);
+					})}
 					<span>Course authors</span>
 					{authors.length > 0 ? (
 						authors.map((item, idx) => (
 							<li key={`courseAuthor${idx}`}>
 								{item.name}
 								<Button
-									buttonText='Delete author'
+									buttonText={buttonText.deleteAuthor}
 									onClick={() => onDelete(item.id)}
 								/>
 							</li>

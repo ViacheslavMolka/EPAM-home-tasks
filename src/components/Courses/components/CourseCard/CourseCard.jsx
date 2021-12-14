@@ -1,8 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
 
 import { Button } from '../../../../common/Button/Button';
-import { getTimeFromMins } from '../../../../helpers/dateHelper';
+import { getTimeFromMins } from '../../../../helpers/timeHelper';
+import { deleteCourse } from '../../../../store/courses/actionCreators';
 
 import './CourseCard.css';
 
@@ -16,6 +21,7 @@ function CourseCard({
 }) {
 	const authorsLine = authors.join(', ');
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	return (
 		<div className='card'>
@@ -33,13 +39,34 @@ function CourseCard({
 				<span>
 					<strong>Created:</strong> {creationDate}
 				</span>
-				<Button
-					buttonText='Show course'
-					onClick={() => navigate(`/courses/${id}`)}
-				/>
+				<div className='btnGroup'>
+					<Button
+						buttonText='Show course'
+						onClick={() => navigate(`/courses/${id}`)}
+					/>
+					<Button
+						className='materialBtn'
+						buttonText={<DeleteIcon />}
+						onClick={() => dispatch(deleteCourse(id))}
+					/>
+					<Button
+						className='materialBtn'
+						buttonText={<CreateIcon />}
+						onClick={() => {}}
+					/>
+				</div>
 			</div>
 		</div>
 	);
 }
+
+CourseCard.propTypes = {
+	description: PropTypes.string,
+	title: PropTypes.string,
+	duration: PropTypes.number,
+	creationDate: PropTypes.string,
+	authors: PropTypes.array,
+	id: PropTypes.string,
+};
 
 export default CourseCard;

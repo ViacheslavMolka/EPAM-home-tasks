@@ -1,24 +1,26 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Button } from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import {
-	mockedAuthorsList,
-	mockedCoursesList,
-	buttonText,
-} from '../../constants';
-import { getDate, getTimeFromMins } from '../../helpers/dateHelper';
+import { buttonText } from '../../constants';
+import { getDate, getTimeFromMins } from '../../helpers/timeHelper';
 import { unique } from '../../helpers/uniqueArray';
+import { addNewCourse } from '../../store/courses/actionCreators';
+import { addNewAuthors } from '../../store/authors/actionCreators';
+import { getAuthors } from '../../selectors';
 
 import './CreateCourse.css';
 
 function CreateCourse() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
-	const [authors, setAuthors] = React.useState([]);
-	const [mockedAuthors, setMockedAuthors] = React.useState(mockedAuthorsList);
+	const { authors } = useSelector(getAuthors);
+	const dispatch = useDispatch();
+
+	const [authorsArray, setAuthorsArray] = React.useState([]);
 	const [authorName, setAuthorName] = React.useState('');
 	const [values, setValues] = React.useState({
 		id: uuidv4(),
@@ -28,16 +30,17 @@ function CreateCourse() {
 		duration: '',
 		authors: [],
 	});
+
 	const onAuthorChange = (e) => {
 		setAuthorName(e.target.value);
 	};
 	const onAuthorCreate = () => {
-		setMockedAuthors([...mockedAuthors, { name: authorName, id: uuidv4() }]);
+		dispatch(addNewAuthors([...authors, { name: authorName, id: uuidv4() }]));
 		setAuthorName('');
 	};
 	const onDelete = (id) => {
-		const newArr = authors.filter((item) => item.id !== id);
-		setAuthors(newArr);
+		const newArr = authorsArray.filter((item) => item.id !== id);
+		setAuthorsArray(newArr);
 	};
 	const handleChange = (e) => {
 		setValues({
@@ -48,9 +51,9 @@ function CreateCourse() {
 	React.useEffect(() => {
 		setValues({
 			...values,
-			authors: authors.map((item) => item.id),
+			authors: authorsArray.map((item) => item.id),
 		});
-	}, [authors, setAuthors]);
+	}, [authorsArray, setAuthorsArray]);
 	const onSubmit = () => {
 		if (
 			!values.title ||
@@ -60,8 +63,8 @@ function CreateCourse() {
 		) {
 			alert('Please, fill in all fields');
 		} else {
-			mockedAuthorsList.push(...authors);
-			mockedCoursesList.push(values);
+			dispatch(addNewAuthors(authorsArray));
+			dispatch(addNewCourse(values));
 			navigate('/courses');
 		}
 	};
@@ -131,9 +134,9 @@ function CreateCourse() {
 				</div>
 				<div className='authorList'>
 					<span className='authorsTitle'>Authors</span>
-					{unique(mockedAuthors).map((item, idx) => {
+					{unique(authors).map((item, idx) => {
 						let isDisabled = false;
-						authors.forEach((a) => {
+						authorsArray.forEach((a) => {
 							if (item.name === a.name) {
 								isDisabled = true;
 							}
@@ -144,14 +147,14 @@ function CreateCourse() {
 								<Button
 									disabled={isDisabled}
 									buttonText={buttonText.addAuthor}
-									onClick={() => setAuthors([...authors, item])}
+									onClick={() => setAuthorsArray([...authorsArray, item])}
 								/>
 							</li>
 						);
 					})}
 					<span>Course authors</span>
-					{authors.length > 0 ? (
-						authors.map((item, idx) => (
+					{authorsArray.length > 0 ? (
+						authorsArray.map((item, idx) => (
 							<li key={`courseAuthor${idx}`}>
 								{item.name}
 								<Button

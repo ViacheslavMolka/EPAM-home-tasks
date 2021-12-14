@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common/Button/Button';
 import { buttonText } from '../../../../constants';
@@ -19,5 +20,10 @@ function SearchBar({ onChange, onSubmit }) {
 		</form>
 	);
 }
+
+SearchBar.propTypes = {
+	onChange: PropTypes.func,
+	onSubmit: PropTypes.func,
+};
 
 export default SearchBar;

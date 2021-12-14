@@ -25,5 +25,19 @@
   white-space: pre;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* max-width: 270px; */
+}
+
+.materialBtn {
+  width: 40px;
+  border: 1px solid purple;
+  background-color: #fff;
+  height: 30px;
+}
+
+.btnGroup {
+  display: flex;
+}
+
+.btnGroup button {
+  margin-right: 5px;
 }

@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 
 import { getTimeFromMins } from '../../helpers/timeHelper';
 import { unique } from '../../helpers/uniqueArray';
-import { getCourses, getAuthors } from '../../selectors';
+import { getAllCourses, getAllAuthors } from '../../selectors';
 
 import './CourseInfo.css';
 
 function CourseInfo() {
 	const { courseId } = useParams();
-	const { courses } = useSelector(getCourses);
-	const { authors } = useSelector(getAuthors);
+	const { courses } = useSelector(getAllCourses);
+	const { authors } = useSelector(getAllAuthors);
 
 	const infoArray = courses.find((item) => item.id === courseId);
 	const authorsList = [];

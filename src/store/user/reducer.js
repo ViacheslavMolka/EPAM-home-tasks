@@ -5,6 +5,7 @@ const initialState = {
 	name: '',
 	email: '',
 	token: '',
+	role: '',
 };
 
 export default function user(state = initialState, action) {
@@ -17,6 +18,14 @@ export default function user(state = initialState, action) {
 		case userTypes.logout:
 			return {
 				...initialState,
+			};
+		case userTypes.current:
+			return {
+				isAuth: true,
+				name: action?.payload?.name,
+				email: action?.payload?.email,
+				token: state.token,
+				role: action?.payload?.role,
 			};
 		default:
 			return state;

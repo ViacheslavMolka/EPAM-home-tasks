@@ -26,6 +26,23 @@ export default function courses(state = initialState, action) {
 			return {
 				courses: newCourses,
 			};
+		case coursesTypes.update:
+			let index;
+			state.courses.forEach((item, idx) => {
+				if (item.id === action.payload.id) {
+					index = idx;
+					return item;
+				}
+			});
+			const updateCourse = [
+				...state.courses.slice(0, index),
+				action.payload,
+				...state.courses.slice(index + 1),
+			];
+			console.log(updateCourse);
+			return {
+				courses: updateCourse,
+			};
 		default:
 			return state;
 	}

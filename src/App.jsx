@@ -6,7 +6,8 @@ import Courses from './components/Courses/Courses';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import CourseInfo from './components/CourseInfo/CourseInfo';
-import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseForm from './components/CreateCourse/CourseForm/CreateForm';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 import './App.css';
 
@@ -18,7 +19,7 @@ function App() {
 		if (token) {
 			navigate('/courses');
 		}
-	}, []);
+	}, [token]);
 
 	return (
 		<div className='wrapper'>
@@ -26,8 +27,23 @@ function App() {
 			<Routes>
 				<Route path='login' element={<Login />} />
 				<Route path='registration' element={<Registration />} />
-				<Route path='courses' element={<Courses />} />
-				<Route path='courses/add' element={<CreateCourse />} />
+				<Route path='/courses' element={<Courses />} />
+				<Route
+					path='courses/add'
+					element={
+						<PrivateRoute>
+							<CourseForm />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='courses/update/:courseId'
+					element={
+						<PrivateRoute>
+							<CourseForm />
+						</PrivateRoute>
+					}
+				/>
 				<Route path='courses/:courseId' element={<CourseInfo />} />
 			</Routes>
 		</div>

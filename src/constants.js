@@ -64,4 +64,5 @@ export const buttonText = {
 	deleteAuthor: 'Delete author',
 	createAuthor: 'Create author',
 	addAuthor: 'Add author',
+	updateCourse: 'Update course',
 };

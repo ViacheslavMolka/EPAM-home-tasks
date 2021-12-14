@@ -8,3 +8,8 @@ export const deleteCourse = (payload) => ({
 	type: coursesTypes.delete,
 	payload,
 });
+
+export const updateCourse = (payload) => ({
+	type: coursesTypes.update,
+	payload,
+});

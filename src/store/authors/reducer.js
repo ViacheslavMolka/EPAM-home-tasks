@@ -17,7 +17,7 @@ export default function authors(state = initialState, action) {
 			};
 		case authorsTypes.add:
 			return {
-				authors: [...state.authors, ...action.payload],
+				authors: [...state.authors, action.payload],
 			};
 		default:
 			return state;

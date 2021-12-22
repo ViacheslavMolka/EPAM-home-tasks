@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
 import { Button } from '../../../../common/Button/Button';
 import { getTimeFromMins } from '../../../../helpers/timeHelper';
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { getUser } from '../../../../selectors';
+import { removeCourse } from '../../../../store/courses/thunk';
 
 import './CourseCard.css';
 
@@ -22,6 +23,8 @@ function CourseCard({
 	const authorsLine = authors.join(', ');
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { role } = useSelector(getUser);
+	const token = localStorage.getItem('token');
 
 	return (
 		<div className='card'>
@@ -44,16 +47,20 @@ function CourseCard({
 						buttonText='Show course'
 						onClick={() => navigate(`/courses/${id}`)}
 					/>
-					<Button
-						className='materialBtn'
-						buttonText={<DeleteIcon />}
-						onClick={() => dispatch(deleteCourse(id))}
-					/>
-					<Button
-						className='materialBtn'
-						buttonText={<CreateIcon />}
-						onClick={() => {}}
-					/>
+					{role === 'admin' && (
+						<>
+							<Button
+								className='materialBtn'
+								buttonText={<DeleteIcon />}
+								onClick={() => dispatch(removeCourse(id, token))}
+							/>
+							<Button
+								className='materialBtn'
+								buttonText={<CreateIcon />}
+								onClick={() => navigate(`/courses/update/${id}`)}
+							/>
+						</>
+					)}
 				</div>
 			</div>
 		</div>
@@ -63,7 +70,7 @@ function CourseCard({
 CourseCard.propTypes = {
 	description: PropTypes.string,
 	title: PropTypes.string,
-	duration: PropTypes.number,
+	duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	creationDate: PropTypes.string,
 	authors: PropTypes.array,
 	id: PropTypes.string,

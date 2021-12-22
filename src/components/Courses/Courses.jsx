@@ -7,19 +7,20 @@ import CourseCard from './components/CourseCard/CourseCard';
 import { Button } from '../../common/Button/Button';
 import { buttonText } from '../../constants';
 import { unique } from '../../helpers/uniqueArray';
-import { coursesAppService } from '../../services';
-import { loadCourses } from '../../store/courses/actionCreators';
-import { loadAuthors } from '../../store/authors/actionCreators';
-import { getAuthors, getCourses } from '../../selectors';
+import { getCourses } from '../../store/courses/thunk';
+import { getAuthors } from '../../store/authors/thunk';
+import { getUser } from '../../store/user/thunk';
+import { getAllAuthors, getAllCourses } from '../../selectors';
 
 import './Courses.css';
 
 function Courses() {
-	const { courses } = useSelector(getCourses);
-	const { authors } = useSelector(getAuthors);
+	const { courses } = useSelector(getAllCourses);
+	const { authors } = useSelector(getAllAuthors);
 
 	const [searchValue, setSearchValue] = React.useState('');
 	const [searchResult, setSearchResult] = React.useState(courses);
+
 	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
 	const dispatch = useDispatch();
@@ -29,13 +30,10 @@ function Courses() {
 	};
 
 	React.useEffect(() => {
-		coursesAppService
-			.getCoursesData()
-			.then((courses) => dispatch(loadCourses(courses.result)));
-		coursesAppService
-			.getAuthorsData()
-			.then((authors) => dispatch(loadAuthors(authors.result)));
-	}, [dispatch]);
+		dispatch(getUser(token));
+		dispatch(getCourses());
+		dispatch(getAuthors());
+	}, [dispatch, token]);
 
 	React.useEffect(() => {
 		if (searchValue === '') {

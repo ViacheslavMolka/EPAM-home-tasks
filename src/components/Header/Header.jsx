@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 import { buttonText } from '../../constants';
-import { userLogout } from '../../store/user/actionCreators';
 import { getUser } from '../../selectors';
+import { logout } from '../../store/user/thunk';
 
 import './Header.css';
 
@@ -16,9 +16,9 @@ function Header() {
 	const dispatch = useDispatch();
 	const { name } = useSelector(getUser);
 
-	const logout = () => {
+	const userLogout = () => {
 		localStorage.setItem('token', '');
-		dispatch(userLogout());
+		dispatch(logout(token));
 		navigate('/login');
 	};
 	return (
@@ -27,7 +27,7 @@ function Header() {
 			<div>
 				<span className='name'>{name}</span>
 				{token ? (
-					<Button buttonText={buttonText.logout} onClick={logout} />
+					<Button buttonText={buttonText.logout} onClick={userLogout} />
 				) : (
 					<Link to='/login'>
 						<Button buttonText={buttonText.login} />

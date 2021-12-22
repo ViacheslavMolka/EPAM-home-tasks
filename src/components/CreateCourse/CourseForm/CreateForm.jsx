@@ -1,41 +1,59 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button } from '../../common/Button/Button';
-import Input from '../../common/Input/Input';
-import { buttonText } from '../../constants';
-import { getDate, getTimeFromMins } from '../../helpers/timeHelper';
-import { unique } from '../../helpers/uniqueArray';
-import { addNewCourse } from '../../store/courses/actionCreators';
-import { addNewAuthors } from '../../store/authors/actionCreators';
-import { getAuthors } from '../../selectors';
+import { Button } from '../../../common/Button/Button';
+import Input from '../../../common/Input/Input';
+import { buttonText } from '../../../constants';
+import { getDate, getTimeFromMins } from '../../../helpers/timeHelper';
+import { unique } from '../../../helpers/uniqueArray';
+import { updateCurrentCourse, addCourse } from '../../../store/courses/thunk';
+import { addAuthors } from '../../../store/authors/thunk';
+import { addNewAuthors } from '../../../store/authors/actionCreators';
+import { getAllCourses, getAllAuthors } from '../../../selectors';
 
 import './CreateCourse.css';
 
-function CreateCourse() {
+function CourseForm() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem('token');
-	const { authors } = useSelector(getAuthors);
+	const { authors } = useSelector(getAllAuthors);
+	const { courses } = useSelector(getAllCourses);
+	const { courseId } = useParams();
 	const dispatch = useDispatch();
 
-	const [authorsArray, setAuthorsArray] = React.useState([]);
+	const currentCourse = courses.find((item) => item.id === courseId);
+	const currentAuthors = [];
+	currentCourse &&
+		currentCourse.authors.forEach((a) => {
+			authors.forEach((b) => {
+				if (a === b.id) {
+					currentAuthors.push(b);
+				}
+			});
+		});
+
+	const [authorsArray, setAuthorsArray] = React.useState(
+		currentAuthors.length ? currentAuthors : []
+	);
 	const [authorName, setAuthorName] = React.useState('');
-	const [values, setValues] = React.useState({
-		id: uuidv4(),
-		title: '',
-		description: '',
-		creationDate: getDate(),
-		duration: '',
-		authors: [],
-	});
+	const [values, setValues] = React.useState(
+		currentCourse || {
+			id: uuidv4(),
+			title: '',
+			description: '',
+			creationDate: getDate(),
+			duration: '',
+			authors: [],
+		}
+	);
 
 	const onAuthorChange = (e) => {
 		setAuthorName(e.target.value);
 	};
 	const onAuthorCreate = () => {
-		dispatch(addNewAuthors([...authors, { name: authorName, id: uuidv4() }]));
+		dispatch(addAuthors(token, { name: authorName }));
 		setAuthorName('');
 	};
 	const onDelete = (id) => {
@@ -54,7 +72,8 @@ function CreateCourse() {
 			authors: authorsArray.map((item) => item.id),
 		});
 	}, [authorsArray, setAuthorsArray]);
-	const onSubmit = () => {
+
+	const onUpdateCourse = () => {
 		if (
 			!values.title ||
 			!values.description ||
@@ -64,7 +83,22 @@ function CreateCourse() {
 			alert('Please, fill in all fields');
 		} else {
 			dispatch(addNewAuthors(authorsArray));
-			dispatch(addNewCourse(values));
+			dispatch(updateCurrentCourse(courseId, token, values));
+			navigate('/courses');
+		}
+	};
+
+	const onSubmitCourse = () => {
+		if (
+			!values.title ||
+			!values.description ||
+			!authors.length > 0 ||
+			!values.duration
+		) {
+			alert('Please, fill in all fields');
+		} else {
+			dispatch(addNewAuthors(authorsArray));
+			dispatch(addCourse(token, values));
 			navigate('/courses');
 		}
 	};
@@ -85,8 +119,10 @@ function CreateCourse() {
 				/>
 				<Button
 					type='submit'
-					buttonText={buttonText.createCourse}
-					onClick={onSubmit}
+					buttonText={
+						currentCourse ? buttonText.updateCourse : buttonText.createCourse
+					}
+					onClick={currentCourse ? onUpdateCourse : onSubmitCourse}
 				/>
 			</div>
 			<div className='description'>
@@ -172,4 +208,4 @@ function CreateCourse() {
 	);
 }
 
-export default CreateCourse;
+export default CourseForm;

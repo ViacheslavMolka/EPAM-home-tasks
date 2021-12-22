@@ -4,4 +4,4 @@ export const getAllCourses = (state) => state.courses;
 
 export const getAllAuthors = (state) => state.authors;
 
-export const getUser = (state) => state.user;
+export const getCurrentUser = (state) => state.user;

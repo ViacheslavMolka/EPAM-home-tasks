@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 import { buttonText } from '../../constants';
-import { getUser } from '../../selectors';
+import { getCurrentUser } from '../../selectors';
 import { logout } from '../../store/user/thunk';
 
 import './Header.css';
@@ -14,7 +14,7 @@ function Header() {
 	const token = localStorage.getItem('token');
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { name } = useSelector(getUser);
+	const { name } = useSelector(getCurrentUser);
 
 	const userLogout = () => {
 		localStorage.setItem('token', '');

@@ -6,7 +6,7 @@ import Courses from './components/Courses/Courses';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import CourseInfo from './components/CourseInfo/CourseInfo';
-import CourseForm from './components/CreateCourse/CourseForm/CreateForm';
+import CourseForm from './components/CreateCourse/CourseForm/CourseForm';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 import './App.css';

@@ -10,13 +10,14 @@ import { unique } from '../../helpers/uniqueArray';
 import { getCourses } from '../../store/courses/thunk';
 import { getAuthors } from '../../store/authors/thunk';
 import { getUser } from '../../store/user/thunk';
-import { getAllAuthors, getAllCourses } from '../../selectors';
+import { getAllAuthors, getAllCourses, getCurrentUser } from '../../selectors';
 
 import './Courses.css';
 
 function Courses() {
 	const { courses } = useSelector(getAllCourses);
 	const { authors } = useSelector(getAllAuthors);
+	const { role } = useSelector(getCurrentUser);
 
 	const [searchValue, setSearchValue] = React.useState('');
 	const [searchResult, setSearchResult] = React.useState(courses);
@@ -83,6 +84,7 @@ function Courses() {
 								duration={item.duration}
 								creationDate={item.creationDate}
 								id={item.id}
+								role={role}
 							/>
 						</div>
 					);

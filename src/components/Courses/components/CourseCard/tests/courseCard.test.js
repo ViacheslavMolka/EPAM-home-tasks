@@ -6,7 +6,7 @@ import { render, screen } from '@testing-library/react';
 
 import CourseCard from '../CourseCard';
 
-test('CourseCard component', () => {
+describe('CourseCard component', () => {
 	const mockedState = {
 		user: {
 			isAuth: true,
@@ -28,16 +28,33 @@ test('CourseCard component', () => {
 		creationDate: '13/02/2020',
 		authors: ['Author name'],
 	};
-	render(
-		<Router>
-			<Provider store={mockedStore}>
-				<CourseCard {...mockedProps} />
-			</Provider>
-		</Router>
-	);
-	expect(screen.getByText('Title: title')).toBeInTheDocument();
-	expect(screen.getByText('description')).toBeInTheDocument();
-	expect(screen.getByText('13/02/2020')).toBeInTheDocument();
-	expect(screen.getByText('0:50')).toBeInTheDocument();
-	expect(screen.getByText('Author name')).toBeInTheDocument();
+	beforeEach(() => {
+		render(
+			<Router>
+				<Provider store={mockedStore}>
+					<CourseCard {...mockedProps} />
+				</Provider>
+			</Router>
+		);
+	});
+
+	it('should display title', () => {
+		expect(screen.getByText('Title: title')).toBeInTheDocument();
+	});
+
+	it('should display description', () => {
+		expect(screen.getByText('description')).toBeInTheDocument();
+	});
+
+	it('should display created date', () => {
+		expect(screen.getByText('13/02/2020')).toBeInTheDocument();
+	});
+
+	it('should display duration in the correct format', () => {
+		expect(screen.getByText('0:50')).toBeInTheDocument();
+	});
+
+	it('should display author list', () => {
+		expect(screen.getByText('Author name')).toBeInTheDocument();
+	});
 });

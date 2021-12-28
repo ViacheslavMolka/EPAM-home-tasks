@@ -7,15 +7,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import CourseForm from '../CourseForm';
 
-const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
-beforeEach(() => {
-	useSelectorMock.mockClear();
-});
-afterEach(() => {
-	localStorage.clear();
-});
-
-test('CourseForm should render', () => {
+describe('CourseForm component', () => {
+	const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
 	const mockedState = {
 		user: {
 			isAuth: true,
@@ -41,31 +34,50 @@ test('CourseForm should render', () => {
 		subscribe: jest.fn(),
 		dispatch: jest.fn(),
 	};
-	localStorage.setItem('token', 'token');
-	useSelectorMock.mockReturnValue(mockedState);
 
-	render(
-		<Router>
-			<Provider store={mockedStore}>
-				<CourseForm />
-			</Provider>
-		</Router>
-	);
+	const renderWithStore = () => {
+		localStorage.setItem('token', 'token');
+		useSelectorMock.mockReturnValue(mockedState);
+		return render(
+			<Router>
+				<Provider store={mockedStore}>
+					<CourseForm />
+				</Provider>
+			</Router>
+		);
+	};
 
-	const list = screen.getAllByTestId('authorsList');
-	expect(list.length).toBe(2);
-
-	fireEvent.change(screen.getByPlaceholderText('Enter author name...'), {
-		target: { value: 'author name' },
+	beforeEach(() => {
+		useSelectorMock.mockClear();
+		renderWithStore();
 	});
-	fireEvent.click(screen.getByText('Create author'));
-	expect(mockedStore.dispatch).toHaveBeenCalledTimes(1);
+	afterEach(() => {
+		localStorage.clear();
+	});
 
-	fireEvent.click(screen.getByTestId('addButton1'));
-	const coursesAuthorList = screen.getAllByTestId('coursesAuthorsList');
-	expect(coursesAuthorList.length).toBe(1);
+	it('Should show authors list', () => {
+		const list = screen.getAllByTestId('authorsList');
+		expect(list.length).toBe(2);
+	});
 
-	fireEvent.click(screen.getByTestId('deleteButton0'));
-	const authorList = screen.queryByTestId('coursesAuthorsList');
-	expect(authorList).toBeNull();
+	it('Create author click button should call dispatch', () => {
+		fireEvent.change(screen.getByPlaceholderText('Enter author name...'), {
+			target: { value: 'author name' },
+		});
+		fireEvent.click(screen.getByText('Create author'));
+		expect(mockedStore.dispatch).toHaveBeenCalledTimes(1);
+	});
+
+	it('Add author button click should add an author to course authors list', () => {
+		fireEvent.click(screen.getByTestId('addButton1'));
+		const coursesAuthorList = screen.getAllByTestId('coursesAuthorsList');
+		expect(coursesAuthorList.length).toBe(1);
+	});
+
+	it('Delete author button click should delete an author from the course list', () => {
+		fireEvent.click(screen.getByTestId('addButton1'));
+		fireEvent.click(screen.getByTestId('deleteButton0'));
+		const authorList = screen.queryByTestId('coursesAuthorsList');
+		expect(authorList).toBeNull();
+	});
 });

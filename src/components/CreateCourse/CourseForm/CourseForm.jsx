@@ -7,7 +7,6 @@ import { Button } from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
 import { buttonText } from '../../../constants';
 import { getDate, getTimeFromMins } from '../../../helpers/timeHelper';
-import { unique } from '../../../helpers/uniqueArray';
 import { updateCurrentCourse, addCourse } from '../../../store/courses/thunk';
 import { addAuthors } from '../../../store/authors/thunk';
 import { addNewAuthors } from '../../../store/authors/actionCreators';
@@ -108,7 +107,7 @@ function CourseForm() {
 	}
 
 	return (
-		<div className='createCourseForm'>
+		<div data-testid='courseForm' className='createCourseForm'>
 			<div className='title'>
 				<Input
 					placeholderText='Enter title...'

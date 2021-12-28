@@ -6,7 +6,7 @@ import { render, screen } from '@testing-library/react';
 
 import Header from '../Header';
 
-test('Header should have logo and user name', () => {
+describe('Header component', () => {
 	const mockedState = {
 		user: {
 			isAuth: true,
@@ -20,13 +20,20 @@ test('Header should have logo and user name', () => {
 		subscribe: jest.fn(),
 		dispatch: jest.fn(),
 	};
-	render(
-		<Router>
-			<Provider store={mockedStore}>
-				<Header />
-			</Provider>
-		</Router>
-	);
-	expect(screen.getByText('Test Name')).toBeInTheDocument();
-	expect(screen.getByAltText('logo')).toBeInTheDocument();
+	beforeEach(() => {
+		render(
+			<Router>
+				<Provider store={mockedStore}>
+					<Header />
+				</Provider>
+			</Router>
+		);
+	});
+
+	it('Should display user name', () => {
+		expect(screen.getByText('Test Name')).toBeInTheDocument();
+	});
+	it('Should display logo', () => {
+		expect(screen.getByAltText('logo')).toBeInTheDocument();
+	});
 });

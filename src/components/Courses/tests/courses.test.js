@@ -8,6 +8,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Courses from '../Courses';
 
 const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useNavigate: () => mockedUsedNavigate,
+}));
+
 beforeEach(() => {
 	useSelectorMock.mockClear();
 });
@@ -78,18 +86,19 @@ test('Courses component should display amount of CourseCard equal length of cour
 	expect(courseCards.length).toBe(mockedState.courses.length);
 });
 
-// test('Should display CourseForm after click', async () => {
-// 	localStorage.setItem('token', 'token');
+test('Should display CourseForm after click', () => {
+	localStorage.setItem('token', 'token');
 
-// 	const mockedStore = {
-// 		getState: () => mockedState,
-// 		subscribe: jest.fn(),
-// 		dispatch: jest.fn(),
-// 	};
-// 	useSelectorMock.mockReturnValue(mockedState);
+	const mockedStore = {
+		getState: () => mockedState,
+		subscribe: jest.fn(),
+		dispatch: jest.fn(),
+	};
+	useSelectorMock.mockReturnValue(mockedState);
 
-// 	renderWithStore(mockedStore);
+	renderWithStore(mockedStore);
 
-// 	fireEvent.click(screen.getByText('Add new course'));
-// 	expect(await screen.findByTestId('courseForm')).toBeInTheDocument();
-// });
+	fireEvent.click(screen.getByText('Add new course'));
+	expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+	expect(mockedUsedNavigate).toHaveBeenCalledWith('add');
+});

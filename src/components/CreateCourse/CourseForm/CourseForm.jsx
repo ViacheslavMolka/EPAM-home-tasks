@@ -7,13 +7,12 @@ import { Button } from '../../../common/Button/Button';
 import Input from '../../../common/Input/Input';
 import { buttonText } from '../../../constants';
 import { getDate, getTimeFromMins } from '../../../helpers/timeHelper';
-import { unique } from '../../../helpers/uniqueArray';
 import { updateCurrentCourse, addCourse } from '../../../store/courses/thunk';
 import { addAuthors } from '../../../store/authors/thunk';
 import { addNewAuthors } from '../../../store/authors/actionCreators';
 import { getAllCourses, getAllAuthors } from '../../../selectors';
 
-import './CreateCourse.css';
+import './CourseForm.css';
 
 function CourseForm() {
 	const navigate = useNavigate();
@@ -23,7 +22,7 @@ function CourseForm() {
 	const { courseId } = useParams();
 	const dispatch = useDispatch();
 
-	const currentCourse = courses.find((item) => item.id === courseId);
+	const currentCourse = courses && courses.find((item) => item.id === courseId);
 	const currentAuthors = [];
 	currentCourse &&
 		currentCourse.authors.forEach((a) => {
@@ -108,7 +107,7 @@ function CourseForm() {
 	}
 
 	return (
-		<div className='createCourseForm'>
+		<div data-testid='courseForm' className='createCourseForm'>
 			<div className='title'>
 				<Input
 					placeholderText='Enter title...'
@@ -168,32 +167,35 @@ function CourseForm() {
 						</span>
 					</div>
 				</div>
-				<div className='authorList'>
+				<div role='list' className='authorList'>
 					<span className='authorsTitle'>Authors</span>
-					{unique(authors).map((item, idx) => {
-						let isDisabled = false;
-						authorsArray.forEach((a) => {
-							if (item.name === a.name) {
-								isDisabled = true;
-							}
-						});
-						return (
-							<li key={`author${idx}`}>
-								{item.name}
-								<Button
-									disabled={isDisabled}
-									buttonText={buttonText.addAuthor}
-									onClick={() => setAuthorsArray([...authorsArray, item])}
-								/>
-							</li>
-						);
-					})}
+					{authors &&
+						authors.map((item, idx) => {
+							let isDisabled = false;
+							authorsArray.forEach((a) => {
+								if (item.name === a.name) {
+									isDisabled = true;
+								}
+							});
+							return (
+								<li data-testid='authorsList' key={`author${idx}`}>
+									{item.name}
+									<Button
+										disabled={isDisabled}
+										dataTestId={`addButton${idx}`}
+										buttonText={buttonText.addAuthor}
+										onClick={() => setAuthorsArray([...authorsArray, item])}
+									/>
+								</li>
+							);
+						})}
 					<span>Course authors</span>
 					{authorsArray.length > 0 ? (
 						authorsArray.map((item, idx) => (
-							<li key={`courseAuthor${idx}`}>
+							<li data-testid='coursesAuthorsList' key={`courseAuthor${idx}`}>
 								{item.name}
 								<Button
+									dataTestId={`deleteButton${idx}`}
 									buttonText={buttonText.deleteAuthor}
 									onClick={() => onDelete(item.id)}
 								/>
@@ -207,5 +209,9 @@ function CourseForm() {
 		</div>
 	);
 }
+
+CourseForm.defaultProps = {
+	authors: [],
+};
 
 export default CourseForm;

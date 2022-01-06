@@ -1,4 +1,4 @@
-export function unique(arr) {
+export function unique(arr = []) {
 	let result = [];
 
 	for (let str of arr) {

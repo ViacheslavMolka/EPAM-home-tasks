@@ -9,12 +9,14 @@ export const Button = ({
 	type = 'button',
 	disabled = false,
 	className = 'button',
+	dataTestId = 'button',
 }) => (
 	<button
 		disabled={disabled}
 		type={type}
 		className={className}
 		onClick={onClick}
+		data-testid={dataTestId}
 	>
 		{buttonText}
 	</button>

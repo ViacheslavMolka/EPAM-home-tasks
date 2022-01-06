@@ -15,7 +15,6 @@ export const addAuthors = (token, values) => {
 			.addAuthors(token, values)
 			.then((data) => {
 				if (data.successful) {
-					console.log(data);
 					dispatch(addNewAuthors(data.result));
 				} else alert(data.message);
 			})

@@ -7,7 +7,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 import { Button } from '../../../../common/Button/Button';
 import { getTimeFromMins } from '../../../../helpers/timeHelper';
-import { getUser } from '../../../../selectors';
+import { getCurrentUser } from '../../../../selectors';
 import { removeCourse } from '../../../../store/courses/thunk';
 
 import './CourseCard.css';
@@ -17,17 +17,17 @@ function CourseCard({
 	title,
 	duration,
 	creationDate,
-	authors,
+	authors = [],
 	id,
 }) {
 	const authorsLine = authors.join(', ');
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { role } = useSelector(getUser);
+	const { role } = useSelector(getCurrentUser);
 	const token = localStorage.getItem('token');
 
 	return (
-		<div className='card'>
+		<div data-testid='courseCard' className='card'>
 			<div className='firstSection'>
 				<span>Title: {title}</span>
 				<p>{description}</p>
